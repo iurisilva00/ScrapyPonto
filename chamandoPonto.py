@@ -1,7 +1,7 @@
 import requests
 import msal
 import os
-from ponto.spiders import ponto
+
 from dotenv import load_dotenv
 import subprocess
 load_dotenv(override=True)
@@ -12,7 +12,7 @@ import json
 import pandas as pd
 import io
 import pyarrow.parquet as pq
-
+import sys
 resultados = []
 
 class PontoSpiderComResultado(PontoSpider):
@@ -120,7 +120,7 @@ class PontoSpiderComResultado(PontoSpider):
             print("❌ Erro ao listar itens em 'General':", general_contents_response.text)
 
         # 🔹 Nome do arquivo que será salvo
-        file_name = "Ponto.parquet"
+        file_name = f"Ponto_{pep}.parquet"
 
         # 🔹 Converte o DataFrame para um arquivo Excel em memória
         output = io.BytesIO()
@@ -144,11 +144,25 @@ class PontoSpiderComResultado(PontoSpider):
         else:
             print(f"❌ Erro ao enviar o arquivo: {response.text}")
 
-process = CrawlerProcess()
-process.crawl(PontoSpiderComResultado)
-process.start()
 
 
+def run_spider(user, senha,pep):
+    process = CrawlerProcess()
+    process.crawl(PontoSpiderComResultado, user=user, senha=senha)
+    process.start()
+
+
+if __name__ == "__main__":
+    load_dotenv(override=True)
+    username = os.getenv("username")
+    password = os.getenv("password")
+    pep = os.getenv("pep")
+
+    if not username or not password:
+        print("❌ Username e senha não encontrados no ambiente!")
+        sys.exit(1)
+
+    run_spider(username, password,pep)
 # def rodar_spider():
 #     subprocess.run(["scrapy", "crawl", "ponto"], check=True)
 
