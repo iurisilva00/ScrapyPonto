@@ -16,6 +16,7 @@ import sys
 resultados = []
 
 class PontoSpiderComResultado(PontoSpider):
+
     def salvar_relatorio(self, response):
         
 
@@ -120,7 +121,7 @@ class PontoSpiderComResultado(PontoSpider):
             print("❌ Erro ao listar itens em 'General':", general_contents_response.text)
 
         # 🔹 Nome do arquivo que será salvo
-        file_name = f"Ponto_{pep}.parquet"
+        file_name = f"Ponto_{self.pep}.parquet"
 
         # 🔹 Converte o DataFrame para um arquivo Excel em memória
         output = io.BytesIO()
@@ -148,7 +149,7 @@ class PontoSpiderComResultado(PontoSpider):
 
 def run_spider(user, senha,pep):
     process = CrawlerProcess()
-    process.crawl(PontoSpiderComResultado, user=user, senha=senha)
+    process.crawl(PontoSpiderComResultado, user=user, senha=senha, pep = pep)
     process.start()
 
 

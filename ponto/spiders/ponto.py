@@ -44,11 +44,11 @@ class PontoSpider(scrapy.Spider):
         'LOG_LEVEL': 'DEBUG',
 
     }
-    def __init__(self, user, senha, **kwargs):
+    def __init__(self, user, senha,pep, **kwargs):
         super().__init__(**kwargs)
         self.user = os.getenv("username")
         self.senha = os.getenv("password")
-
+        self.pep = os.getenv("pep")
         self.data_fim = (datetime.now() - timedelta(days=1)).strftime('%d/%m/%Y')
         self.data_inicio = (datetime.now() - timedelta(days=61)).strftime('%d/%m/%Y')
 
